@@ -6,11 +6,16 @@ import Image from "next/image";
 import { UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import AddNoteDialog from "@/components/add-note-dialog";
+import AddEditNoteDialog from "@/components/add-edit-note-dialog";
+import ThemeToggleButton from "@/components/theme-toggle-button";
+import { dark } from "@clerk/themes";
+import { useTheme } from "next-themes";
+import ChatButton from "@/components/chat-button";
 // import Logo from "@/assets/logo.png";
 
 export default function NavBar() {
-  const [showAddNoteDialog, setShowAddNoteDialog] = useState(false);
+  const { theme } = useTheme();
+  const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
 
   return (
     <>
@@ -24,17 +29,23 @@ export default function NavBar() {
             <UserButton
               afterSignOutUrl="/"
               appearance={{
+                baseTheme: theme === "dark" ? dark : undefined,
                 elements: { avatarBox: { width: "2.5rem", height: "2.5rem" } },
               }}
             />
-            <Button onClick={() => setShowAddNoteDialog(true)}>
+            <ThemeToggleButton />
+            <Button onClick={() => setShowAddEditNoteDialog(true)}>
               <Plus size={20} className="mr-2" />
               Add note
             </Button>
+            <ChatButton />
           </div>
         </div>
       </div>
-      <AddNoteDialog open={showAddNoteDialog} setOpen={setShowAddNoteDialog} />
+      <AddEditNoteDialog
+        open={showAddEditNoteDialog}
+        setOpen={setShowAddEditNoteDialog}
+      />
     </>
   );
 }
